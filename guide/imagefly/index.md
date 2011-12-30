@@ -6,12 +6,12 @@ This module allows you to quickly create resized / cropped images directly throu
 
 In your `application/bootstrap.php` file modify the call to Kohana::modules and include the image and imagefly modules.
 
-    Kohana::modules(array(
-        ...
-        'image'    => MODPATH.'image',
-        'imagefly' => MODPATH.'imagefly',
-        ...
-    ));
+	Kohana::modules(array(
+		...
+		'image'    => MODPATH.'image',
+		'imagefly' => MODPATH.'imagefly',
+		...
+	));
 
 [!!] The image module is requried for the Imagefly module to work.
 
@@ -27,11 +27,3 @@ In your `application/bootstrap.php` file modify the call to Kohana::modules and 
 Imagefly currently works with Kohana 3.2 only.
 
 For Kohana 3.0.x and 3.1.x users, a no longer maintained version can be found [here](http://code.google.com/p/kohana-3-imagefly/)
-
-## Configuration
-
-TODO...
-
-## Usage
-
-TODO...
