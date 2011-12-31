@@ -1,3 +1,3 @@
 ## [Imagefly]()
 - [Configuration](configuration)
-- [Usage](usage)
+- [Usage Examples](usage)

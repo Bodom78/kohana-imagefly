@@ -15,7 +15,7 @@ class ImageFly
     
     /**
      * @var  string      Stores the path to the cache directory which is either whats set in the config "cache_dir"
-     *                   or processed sub directories when the "mimic_sourcestructure" config option id set to TRUE
+     *                   or processed sub directories when the "mimic_source_dir" config option id set to TRUE
      */
     protected $cache_dir = NULL;
     
@@ -116,7 +116,7 @@ class ImageFly
      */
     private function _create_mimic_cache_dir()
     {
-        if ($this->config['mimic_sourcestructure'])
+        if ($this->config['mimic_source_dir'])
         {
             // Get the dir from the source file
             $mimic_dir = $this->config['cache_dir'].pathinfo($this->source_file, PATHINFO_DIRNAME);
