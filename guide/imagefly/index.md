@@ -2,6 +2,10 @@
 
 This module allows you to quickly create resized / cropped images directly through url parameters. Modified images are cached after the initial request and served up thereafter to help reduce server strain.
 
+## Demo
+
+[Click here to see the Imagefly demo.](http://www.fkportfolio.com/playground/imagefly-demo)
+
 ## Getting started
 
 In your `application/bootstrap.php` file modify the call to Kohana::modules and include the image and imagefly modules.
