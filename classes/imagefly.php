@@ -154,7 +154,7 @@ class ImageFly
         $this->image = Image::factory($filepath);
         
         // The parameters are separated by hyphens
-        $raw_params	= explode('-', $params);
+        $raw_params = explode('-', $params);
         
         // Set default param values
         $this->url_params['w'] = NULL;
@@ -169,21 +169,22 @@ class ImageFly
             if ($name == 'c')
             {
                 $this->url_params[$name] = TRUE;
+                
+                // When croping, we must have a width and height to pass to imagecreatetruecolor method
+                // Make width the height or vice versa if either is not passed
+                if (empty($this->url_params['w']))
+                {
+                    $this->url_params['w'] = $this->url_params['h'];
+                }
+                if (empty($this->url_params['h']))
+                {
+                    $this->url_params['h'] = $this->url_params['w'];
+                }
             }
             else
             {
                 $this->url_params[$name] = $value;
             }
-        }
-        
-        // Make width the height or vice versa if either is not passed
-        if (empty($this->url_params['w']))
-        {
-            $this->url_params['w'] = $this->url_params['h'];
-        }
-        if (empty($this->url_params['h']))
-        {
-            $this->url_params['h'] = $this->url_params['w'];
         }
         
         // Must have at least a width or height
@@ -213,7 +214,7 @@ class ImageFly
      */
     private function _cached_required()
     {
-        $image_info	= getimagesize($this->source_file);
+        $image_info = getimagesize($this->source_file);
         
         if (($this->url_params['w'] == $image_info[0]) AND ($this->url_params['h'] == $image_info[1]))
         {
@@ -358,8 +359,8 @@ class ImageFly
         $data = file_get_contents($file_data);
 
         // Send the image to the browser in bite-sized chunks
-        $chunk_size	= 1024 * 8;
-        $fp	= fopen('php://memory', 'r+b');
+        $chunk_size = 1024 * 8;
+        $fp = fopen('php://memory', 'r+b');
 
         // Process file data
         fwrite($fp, $data);
