@@ -372,7 +372,6 @@ class ImageFly
         }
         fclose($fp);
 
-        return $data;
         exit();
     }
 }
