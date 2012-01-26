@@ -151,6 +151,10 @@ class ImageFly
         $params = Request::current()->param('params');
         $filepath = Request::current()->param('imagepath');
         
+        // If enforcing params, enssure it's a match
+        if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']))
+            throw new Kohana_Exception('Invalid preset');
+        
         $this->image = Image::factory($filepath);
         
         // The parameters are separated by hyphens
