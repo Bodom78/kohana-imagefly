@@ -153,7 +153,8 @@ class ImageFly
         
         // If enforcing params, enssure it's a match
         if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']))
-            throw new Kohana_Exception('Invalid preset');
+            throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
+                                                    array(':uri' => Request::$current->uri()));
         
         $this->image = Image::factory($filepath);
         
@@ -194,7 +195,8 @@ class ImageFly
         // Must have at least a width or height
         if(empty($this->url_params['w']) AND empty($this->url_params['h']))
         {
-            throw new Kohana_Exception('Invalid parameters, you must specify a width and/or height');
+            throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
+                                                    array(':uri' => Request::$current->uri()));
         }
   
         // Set the url filepath
