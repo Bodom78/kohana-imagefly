@@ -98,7 +98,7 @@ class Imagefly
         {
             try
             {
-                mkdir($this->config['cache_dir'], 0755, TRUE);
+                mkdir($this->config['cache_dir'], 0775, TRUE);
             }
             catch(Exception $e)
             {
@@ -126,7 +126,7 @@ class Imagefly
             {
                 try
                 {
-                    mkdir($mimic_dir, 0755, TRUE);
+                    mkdir($mimic_dir, 0775, TRUE);
                 }
                 catch(Exception $e)
                 {
