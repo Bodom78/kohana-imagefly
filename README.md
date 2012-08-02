@@ -28,9 +28,9 @@ In your `application/bootstrap.php` file modify the call to Kohana::modules and 
 
 ## Compatibility
 
-Imagefly currently works with Kohana 3.2 only.
+Imagefly has been updated for Kohana 3.3
 
-For Kohana 3.0.x and 3.1.x users, a no longer maintained version can be found [here](http://code.google.com/p/kohana-3-imagefly/)
+
 
 ## Configuration
 
@@ -41,6 +41,7 @@ The Imagefly configuration file looks like this:
     array(
         'cache_expire'     => string CACHE_EXPIRE,
         'cache_dir'        => string CACHE_DIR,
+        'source_dir'       => strong SOURC_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
         'presets'          => array(
@@ -55,6 +56,10 @@ How long before the browser checks the server for a new version of the modified 
 
 **CACHE_DIR**  
 Path to the image cache directory you would like to use, don't forget the trailing slash!
+
+*SOURCE_DIR**  
+Path to the image directory you would like to use, don't forget the trailing slash!
+
 
 **MIMIC_SOURCE_DIR**  
 Mimic the source file folder structure within the cache directory. Useful if you want to keep track of cached files and folders to perhaps  periodically clear some cache folders but not others. Default TRUE

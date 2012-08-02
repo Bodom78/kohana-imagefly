@@ -6,11 +6,11 @@
  * @uses      Image Module
  */
  
-class Controller_ImageFly extends Controller
+class Controller_Imagefly extends Controller
 {
     public function action_index()
     {
         $this->auto_render = FALSE;
-        new ImageFly();
+        new Imagefly();
     }
 }

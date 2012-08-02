@@ -6,8 +6,8 @@
  * @uses      Image Module
  */
  
-Route::set('imagefly', 'imagefly/<params>/<imagepath>', array('imagepath' => '.*'))
+Route::set('imagefly', 'resize/<params>/<imagepath>', array('imagepath' => '.*'))
     ->defaults(array(
-        'controller' => 'imagefly',
+        'controller' => 'Imagefly',
     ));
     

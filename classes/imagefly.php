@@ -6,7 +6,7 @@
  * @uses      Image Module
  */
  
-class ImageFly
+class Imagefly
 {
     /**
      * @var  array       This modules config options
@@ -149,7 +149,7 @@ class ImageFly
     {
         // Get values from request
         $params = Request::current()->param('params');
-        $filepath = Request::current()->param('imagepath');
+        $filepath = $this->config['source_dir'].Request::current()->param('imagepath');
         
         // If enforcing params, ensure it's a match
         if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']))
