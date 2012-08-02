@@ -41,7 +41,7 @@ The Imagefly configuration file looks like this:
     array(
         'cache_expire'     => string CACHE_EXPIRE,
         'cache_dir'        => string CACHE_DIR,
-        'source_dir'       => strong SOURC_DIR,
+        'source_dir'       => strong SOURCE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
         'presets'          => array(
