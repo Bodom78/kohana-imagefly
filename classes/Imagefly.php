@@ -192,6 +192,17 @@ class Imagefly
             }
         }
         
+        // If either a max width or max height are not specified or larger than
+        // the source image we default to the dimension of the source image so
+        // they do not become constraints on our resized image.
+        if (!$this->url_params['w'] || $this->url_params['w'] > $this->image->width) {
+            $this->url_params['w'] = $this->image->width;
+        }
+
+        if (!$this->url_params['h'] ||  $this->url_params['h'] > $this->image->height) {
+            $this->url_params['h'] = $this->image->height;
+        }
+        
         // Must have at least a width or height
         if(empty($this->url_params['w']) AND empty($this->url_params['h']))
         {
