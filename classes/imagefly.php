@@ -193,6 +193,13 @@ class ImageFly
                 $this->url_params[$name] = $value;
             }
         }
+
+		//Do not scale up images
+		if (!$this->config['scale_up'])
+		{
+			if ($this->url_params['w'] > $this->image->width) $this->url_params['w'] = $this->image->width;
+			if ($this->url_params['h'] > $this->image->height) $this->url_params['h'] = $this->image->height;
+		}
         
         // Must have at least a width or height
         if(empty($this->url_params['w']) AND empty($this->url_params['h']))

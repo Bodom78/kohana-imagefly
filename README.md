@@ -59,6 +59,9 @@ Path to the image cache directory you would like to use, don't forget the traili
 **MIMIC_SOURCE_DIR**  
 Mimic the source file folder structure within the cache directory. Useful if you want to keep track of cached files and folders to perhaps  periodically clear some cache folders but not others. Default TRUE
 
+**SCALE_UP**  
+If image should be scaled up beyond it's original dimensions on resize. Default FALSE.
+
 **ENFORCE_PRESETS**  
 Will only allow param configurations entered in the PRESETS array. Recommended for production sites to reduce the impact of spamming different sized images on the server.
 
