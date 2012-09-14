@@ -43,6 +43,7 @@ The Imagefly configuration file looks like this:
         'cache_dir'        => string CACHE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
+        'scale_up'		   =>  FALSE,
         'presets'          => array(
             'w320-h240-c',
         ),
@@ -58,6 +59,9 @@ Path to the image cache directory you would like to use, don't forget the traili
 
 **MIMIC_SOURCE_DIR**  
 Mimic the source file folder structure within the cache directory. Useful if you want to keep track of cached files and folders to perhaps  periodically clear some cache folders but not others. Default TRUE
+
+**SCALE_UP**  
+If image should be scaled up beyond it's original dimensions on resize. Default FALSE.
 
 **ENFORCE_PRESETS**  
 Will only allow param configurations entered in the PRESETS array. Recommended for production sites to reduce the impact of spamming different sized images on the server.
@@ -85,3 +89,6 @@ Here are some examples of what you can do with Imagefly.
 
 **Resize proportionally until either the width or height is 100 pixels, whichever comes first**  
 `/imagefly/w100-h100/path/to/image.jpg`
+
+**Resize proportionally until height is 100 pixels with JPEG quality set to 60**  
+`/imagefly/h100-q60/path/to/image.jpg`

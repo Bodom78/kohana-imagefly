@@ -9,8 +9,10 @@ The Imagefly configuration file looks like this:
         'cache_dir'        => string CACHE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
+        'scale_up'		   =>  FALSE,
         'presets'          => array(
             'w320-h240-c',
+            'w320-h240-c-q35',
         ),
     ),
 	
@@ -27,6 +29,9 @@ MIMIC_SOURCE_DIR
 
 ENFORCE_PRESETS
 :  Will only allow param configurations entered in the PRESETS array. Recommended for production sites to reduce the impact of spamming different sized images on the server.
+
+SCALE_UP
+:  If image should be scaled up beyond it's original dimensions on resize. Default FALSE.
 
 PRESETS
 : Imagefly params to allow when ENFORCE_PRESETS is set to TRUE.

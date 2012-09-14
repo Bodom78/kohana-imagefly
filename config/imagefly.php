@@ -12,7 +12,8 @@ return array
     'cache_dir'        => 'media/cache/',
     'mimic_source_dir' => TRUE,
     'enforce_presets'  => TRUE,
+	'scale_up'		   =>  FALSE,
     'presets'          => array(
-        'w320-h240-c',
+        'w320-h240-c-q60',
     ),
 );

@@ -39,6 +39,7 @@ class ImageFly
      *                   w = Width (int)
      *                   h = Height (int)
      *                   c = Crop (bool)
+	 *					 q = Quality (int)
      */
     protected $url_params = array();
     
@@ -165,6 +166,7 @@ class ImageFly
         $this->url_params['w'] = NULL;
         $this->url_params['h'] = NULL;
         $this->url_params['c'] = FALSE;
+		$this->url_params['q'] = NULL;
         
         // Update param values from passed values
         foreach ($raw_params as $raw_param)
@@ -191,6 +193,13 @@ class ImageFly
                 $this->url_params[$name] = $value;
             }
         }
+
+		//Do not scale up images
+		if (!$this->config['scale_up'])
+		{
+			if ($this->url_params['w'] > $this->image->width) $this->url_params['w'] = $this->image->width;
+			if ($this->url_params['h'] > $this->image->height) $this->url_params['h'] = $this->image->height;
+		}
         
         // Must have at least a width or height
         if(empty($this->url_params['w']) AND empty($this->url_params['h']))
@@ -266,8 +275,17 @@ class ImageFly
             $this->image->resize($this->url_params['w'], $this->url_params['h']);
         }
         
-        // Save
-        $this->image->save($this->cached_file);
+		// Save
+		if($this->url_params['q'])
+		{
+			//Save image with quality param
+			$this->image->save($this->cached_file, $this->url_params['q']);
+		}
+		else
+		{
+			//Save image with default quality
+			$this->image->save($this->cached_file);
+		}
     }
     
     /**
