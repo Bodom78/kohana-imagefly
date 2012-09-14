@@ -43,6 +43,7 @@ The Imagefly configuration file looks like this:
         'cache_dir'        => string CACHE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
+        'scale_up'		   =>  FALSE,
         'presets'          => array(
             'w320-h240-c',
         ),
