@@ -18,3 +18,6 @@ Resize proportionally until height is 100 pixels
 
 Resize proportionally until either the width or height is 100 pixels, whichever comes first
 :  `/imagefly/w100-h100/path/to/image.jpg`
+
+Resize proportionally until width is 100 pixels with JPEG quality 65
+:  `/imagefly/w100-q65/path/to/image.jpg`

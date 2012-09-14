@@ -13,6 +13,6 @@ return array
     'mimic_source_dir' => TRUE,
     'enforce_presets'  => TRUE,
     'presets'          => array(
-        'w320-h240-c',
+        'w320-h240-c-q60',
     ),
 );

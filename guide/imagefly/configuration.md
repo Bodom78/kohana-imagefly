@@ -11,6 +11,7 @@ The Imagefly configuration file looks like this:
         'enforce_presets'  => TRUE,
         'presets'          => array(
             'w320-h240-c',
+            'w320-h240-c-q35',
         ),
     ),
 	
