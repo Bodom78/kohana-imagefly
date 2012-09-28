@@ -8,12 +8,13 @@
 
 return array
 (
-    'cache_expire'     => 7 * 24 * 60 * 60,
-    'cache_dir'        => 'media/imagecache/',
-    'source_dir'       => MEDIAPATH.'images/',
-    'mimic_source_dir' => FALSE,
-    'enforce_presets'  => FALSE,
-    'presets'          => array(
-        'w100-h240-c',
-    ),
+	'cache_expire'     => 7 * 24 * 60 * 60,
+	'cache_dir'        => 'media/imagecache/',
+	'source_dir'       => MEDIAPATH.'images/',
+	'mimic_source_dir' => FALSE,
+	'frame'            => FALSE,	
+	'enforce_presets'  => FALSE,
+	'presets'          => array(
+		'w100-h240-c',
+	),
 );

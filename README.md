@@ -30,8 +30,6 @@ In your `application/bootstrap.php` file modify the call to Kohana::modules and 
 
 Imagefly has been updated for Kohana 3.3
 
-
-
 ## Configuration
 
 The default config file is located in `MODPATH/imagefly/config/imagefly.php`.  You should copy this file to `APPPATH/config/imagefly.php` and make changes there, in keeping with the cascading filesystem.
@@ -41,7 +39,8 @@ The Imagefly configuration file looks like this:
     array(
         'cache_expire'     => string CACHE_EXPIRE,
         'cache_dir'        => string CACHE_DIR,
-        'source_dir'       => strong SOURCE_DIR,
+        'frame'            => FALSE,
+		'source_dir'       => strong SOURCE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
         'presets'          => array(
@@ -73,6 +72,13 @@ Imagefly params to allow when ENFORCE_PRESETS is set to TRUE.
 ## Usage Examples
 
 Here are some examples of what you can do with Imagefly.
+
+** Resize image to 300 x 200, and frame into a 300 x 300 square  **
+`/imagefly/w300-h200-f/path/to/image.jpg`
+
+** Resize image to either 300 wide or 200 high , and frame into a 300 x 250 box (adding padding) **
+`/imagefly/w300-h200-r/path/to/image.jpg`
+
 
 **Resize to exactly 100px width and height cropping from the center**  
 `/imagefly/w100-c/path/to/image.jpg`  

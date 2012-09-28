@@ -166,6 +166,7 @@ class Kohana_Imagefly
         $this->url_params['h'] = NULL;
         $this->url_params['c'] = FALSE;
         $this->url_params['f'] = FALSE;
+        $this->url_params['r'] = FALSE;
         
         // Update param values from passed values
         foreach ($raw_params as $raw_param)
@@ -173,26 +174,11 @@ class Kohana_Imagefly
             $name = $raw_param[0];
                       
             $value = substr($raw_param, 1, strlen($raw_param) - 1);
-            if ($name == 'c')
+            if ($name == 'c' OR $name == 'f' OR $name == 'r')
             {
                 $this->url_params[$name] = TRUE;
                 
                 // When croping, we must have a width and height to pass to imagecreatetruecolor method
-                // Make width the height or vice versa if either is not passed
-                if (empty($this->url_params['w']))
-                {
-                    $this->url_params['w'] = $this->url_params['h'];
-                }
-                if (empty($this->url_params['h']))
-                {
-                    $this->url_params['h'] = $this->url_params['w'];
-                }
-            }
-            elseif($name == 'f')
-            {
-	            $this->url_params[$name] = TRUE;
-	            
-	            // When framing, we must have a width and height to pass to imagecreatetruecolor method
                 // Make width the height or vice versa if either is not passed
                 if (empty($this->url_params['w']))
                 {
@@ -294,7 +280,11 @@ class Kohana_Imagefly
             $this->image->resize($this->url_params['w'], $this->url_params['h']);
         }
         
-        if($this->url_params['f'] OR $this->config['frame'] == true)
+        if($this->url_params['r'])
+        {
+	        $this->image->frame($this->url_params['w'], $this->url_params['h']);
+        }
+        elseif($this->url_params['f'] OR $this->config['frame'] == true)
         {
         	if($this->url_params['w'] > $this->url_params['h'])
         	{
@@ -305,6 +295,7 @@ class Kohana_Imagefly
 			    $this->image->frame($this->url_params['h'], $this->url_params['h']);
 		    }
         }
+        
         
 //        $this->image->resize($this->url_params['w'], $this->url_params['h']);
 //        $this->image->frame($this->url_params['w'], $this->url_params['w']);
