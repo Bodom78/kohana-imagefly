@@ -156,7 +156,13 @@ class Kohana_Imagefly
             throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
                                                     array(':uri' => Request::$current->uri()));
         
-        $this->image = Image::factory($filepath);
+        try { 
+        	$this->image = Image::factory($filepath);
+        	
+        } catch ( Kohana_Exception $e) {
+	        $this->image = Image::factory($this->config['source_dir'].'images/default.png');
+	        
+        }
         
         // The parameters are separated by hyphens
         $raw_params = explode('-', $params);
@@ -255,8 +261,12 @@ class Kohana_Imagefly
         $ext = strtolower(pathinfo($this->source_file, PATHINFO_EXTENSION));
         $encode = md5($this->source_file.http_build_query($this->url_params));
 
+        //$check = $this->source_modified;
+        $check = sha1_file($this->source_file);
+        // Check the hash of the file contents instead of the modified date
+        
         // Build the parts of the filename
-        $encoded_name = $encode.'-'.$this->source_modified.'.'.$ext;
+        $encoded_name = $encode.'-'.$check.'.'.$ext;
 
         return $encoded_name;
     }
