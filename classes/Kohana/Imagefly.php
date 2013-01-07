@@ -57,6 +57,7 @@ class Kohana_Imagefly
      */
     public function __construct()
     {
+    	
         // Prevent unnecessary warnings on servers that are set to display E_STRICT errors, these will damage the image data.
         error_reporting(error_reporting() & ~E_STRICT);
         
@@ -69,8 +70,12 @@ class Kohana_Imagefly
         // Parse and set the image modify params
         $this->_set_params();
         
+        if  ( !file_exists($this->source_file) ):
+        	header("HTTP/1.0 404 Not Found");
+        	exit;
+        endif;
         // Set the source file modified timestamp
-        $this->source_modified = filemtime($this->source_file);
+        //$this->source_modified = filemtime($this->source_file);
         
         // Try to create the mimic directory structure if required
         $this->_create_mimic_cache_dir();
@@ -262,7 +267,11 @@ class Kohana_Imagefly
         $encode = md5($this->source_file.http_build_query($this->url_params));
 
         //$check = $this->source_modified;
-        $check = sha1_file($this->source_file);
+        if ( file_exists($this->source_file) ):
+        	$check = sha1_file($this->source_file);
+        else:
+        	$check = '';
+        endif;
         // Check the hash of the file contents instead of the modified date
         
         // Build the parts of the filename
