@@ -320,7 +320,13 @@ class Kohana_Imagefly
 //        $this->image->frame($this->url_params['w'], $this->url_params['w']);
         
         // Save
-        $this->image->save($this->cached_file);
+        if ( array_key_exists($this->config, 'quality') ):
+            $quality = $this->config['quality'];
+        else:
+            $quality = 100;
+        endif;
+
+        $this->image->save($this->cached_file, $quality);
     }
     
     /**
