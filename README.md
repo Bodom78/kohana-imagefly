@@ -28,7 +28,7 @@ In your `application/bootstrap.php` file modify the call to Kohana::modules and 
 
 ## Compatibility
 
-Imagefly currently works with Kohana 3.2 only.
+Imagefly currently works with Kohana 3.2 and 3.3
 
 For Kohana 3.0.x and 3.1.x users, a no longer maintained version can be found [here](http://code.google.com/p/kohana-3-imagefly/)
 
@@ -43,7 +43,7 @@ The Imagefly configuration file looks like this:
         'cache_dir'        => string CACHE_DIR,
         'mimic_source_dir' => string MIMIC_SOURCE_DIR,
         'enforce_presets'  => TRUE,
-        'scale_up'		   =>  FALSE,
+        'scale_up'         => FALSE,
         'presets'          => array(
             'w320-h240-c',
         ),
