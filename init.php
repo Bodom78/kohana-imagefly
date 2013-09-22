@@ -8,6 +8,6 @@
  
 Route::set('imagefly', 'imagefly/<params>/<imagepath>', array('imagepath' => '.*'))
     ->defaults(array(
-        'controller' => 'imagefly',
+        'controller' => 'ImageFly',
     ));
     
