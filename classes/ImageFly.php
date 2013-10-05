@@ -36,12 +36,13 @@ class ImageFly
     
     /**
      * @var  array       Stores the URL params in the following format
-     *                   w = Width (int)
-     *                   h = Height (int)
-     *                   c = Crop (bool)
-     *                   q = Quality (int)
      */
-    protected $url_params = array();
+    protected $url_params = array(
+        'w' => NULL,  // Width (int)
+        'h' => NULL,  // Height (int)
+        'c' => FALSE, // Crop (bool)
+        'q' => NULL   // Quality (int)
+    );
     
     /**
      * @var  string      Last modified Unix timestamp of the source file
@@ -79,7 +80,7 @@ class ImageFly
         // Set the cached filepath with filename
         $this->cached_file = $this->cache_dir.$this->_encoded_filename();
         
-        // Create a modified cache file or dont...
+        // Create a modified cache file if required
         if ( ! $this->_cached_exists() AND $this->_cached_required())
         {
             $this->_create_cached();
@@ -142,9 +143,6 @@ class ImageFly
     
     /**
      * Sets the operations params from the url
-     * w = Width (int)
-     * h = Height (int)
-     * c = Crop (bool)
      */
     private function _set_params()
     {
@@ -162,17 +160,12 @@ class ImageFly
         // The parameters are separated by hyphens
         $raw_params = explode('-', $params);
         
-        // Set default param values
-        $this->url_params['w'] = NULL;
-        $this->url_params['h'] = NULL;
-        $this->url_params['c'] = FALSE;
-        $this->url_params['q'] = NULL;
-        
         // Update param values from passed values
         foreach ($raw_params as $raw_param)
         {
             $name = $raw_param[0];
             $value = substr($raw_param, 1, strlen($raw_param) - 1);
+            
             if ($name == 'c')
             {
                 $this->url_params[$name] = TRUE;
@@ -188,9 +181,15 @@ class ImageFly
                     $this->url_params['h'] = $this->url_params['w'];
                 }
             }
+            elseif (key_exists($name, $this->url_params))
+            {
+                // Remaining expected params (w, h, q)
+                $this->url_params[$name] = $value;
+            }
             else
             {
-                $this->url_params[$name] = $value;
+                // Watermarks or invalid params
+                $this->url_params[$raw_param] = $raw_param;
             }
         }
 
@@ -275,6 +274,20 @@ class ImageFly
             $this->image->resize($this->url_params['w'], $this->url_params['h']);
         }
         
+        // Apply any valid watermark params
+        $watermarks = Arr::get($this->config, 'watermarks');
+        if ( ! empty($watermarks))
+        {
+            foreach ($watermarks as $key => $watermark)
+            {
+                if (key_exists($key, $this->url_params))
+                {
+                    $image = Image::factory($watermark['image']);
+                    $this->image->watermark($image, $watermark['offset_x'], $watermark['offset_y'], $watermark['opacity']);
+                }
+            }
+        }
+        
         // Save
         if($this->url_params['q'])
 		{
@@ -284,7 +297,7 @@ class ImageFly
         else
         {
             //Save image with default quality
-            $this->image->save($this->cached_file);
+            $this->image->save($this->cached_file, Arr::get($this->config, 'quality', 80));
         }
     }
     
