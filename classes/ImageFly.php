@@ -18,6 +18,11 @@ class ImageFly
      *                   or processed sub directories when the "mimic_source_dir" config option id set to TRUE
      */
     protected $cache_dir = NULL;
+
+    /**
+     * @var  string      Stores the path to the media directory (set in the config "media_dir")
+     */
+    protected $media_dir = NULL;
     
     /**
      * @var  object      Kohana image instance
@@ -64,6 +69,8 @@ class ImageFly
         
         // Set the config
         $this->config = Kohana::$config->load('imagefly');
+
+        $this->media_dir = $this->config['media_dir'];
         
         // Try to create the cache directory if it does not exist
         $this->_create_cache_dir();
@@ -72,7 +79,7 @@ class ImageFly
         $this->_set_params();
         
         // Set the source file modified timestamp
-        $this->source_modified = filemtime($this->source_file);
+        $this->source_modified = filemtime($this->media_dir.$this->source_file);
         
         // Try to create the mimic directory structure if required
         $this->_create_mimic_cache_dir();
@@ -155,7 +162,7 @@ class ImageFly
             throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
                                                     array(':uri' => Request::$current->uri()));
         
-        $this->image = Image::factory($filepath);
+        $this->image = Image::factory($this->media_dir.$filepath);
         
         // The parameters are separated by hyphens
         $raw_params = explode('-', $params);
@@ -228,7 +235,7 @@ class ImageFly
      */
     private function _cached_required()
     {
-        $image_info = getimagesize($this->source_file);
+        $image_info = getimagesize($this->media_dir.$this->source_file);
         
         if (($this->url_params['w'] == $image_info[0]) AND ($this->url_params['h'] == $image_info[1]))
         {
@@ -371,7 +378,7 @@ class ImageFly
         // Set either the source or cache file as our datasource
         if ($this->serve_default)
         {
-            $file_data = $this->source_file;
+            $file_data = $this->media_dir.$this->source_file;
         }
         else
         {
