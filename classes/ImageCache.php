@@ -67,6 +67,9 @@ class ImageCache
     
     /**
      * Constructorbot
+     * 
+     * @param string $imagepath Path of input image
+     * @param string $pattern   Name of applied pattern
      */
     public function __construct($imagepath = NULL, $pattern = NULL)
     {
@@ -155,7 +158,11 @@ class ImageCache
     }
 
     /**
-     * Sets the operations params from the url
+     * Sets the operations params
+     * 
+     * @param string $imagepath Path of input image
+     * @param string $pattern   Name of applied pattern
+     * @throws HTTP_Exception_404
      */
     protected function _set_params($imagepath = NULL, $pattern = NULL)
     {
@@ -419,8 +426,6 @@ class ImageCache
     
     /**
      * Outputs the cached image file and exits
-     * 
-     * @param  string     path to the file to server (either default or cached version)
      */
     public function output_file()
     {
