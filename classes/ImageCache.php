@@ -91,16 +91,18 @@ class ImageCache
 
         // Parse and set the image modify params
         $this->_set_params($imagepath, $pattern);
-        
-        // Set the source file modified timestamp
-        $this->source_modified = filemtime($this->source_file);
-        
-        // Try to create the mimic directory structure if required
-        $this->_create_mimic_cache_dir();
-        
-        // Set the cached filepath with filename
-        $this->cached_file = $this->cache_dir . pathinfo($this->source_file, PATHINFO_BASENAME);
-        
+
+        if (empty($this->cached_file))
+        {
+            // Set the source file modified timestamp
+            $this->source_modified = filemtime($this->source_file);
+
+            // Try to create the mimic directory structure if required
+            $this->_create_mimic_cache_dir();
+
+            // Set the cached filepath with filename
+            $this->cached_file = $this->cache_dir . pathinfo($this->source_file, PATHINFO_BASENAME);
+        }
         // Create a modified cache file if required
         if ( ! $this->_cached_exists() AND $this->_cached_required())
         {
@@ -199,98 +201,117 @@ class ImageCache
         }
 
         // If pattern not exist return 404
-        if (!array_key_exists($pattern, $this->config_patterns))
-            throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
-                                                    array(':uri' => Request::$current->uri()));
-
-        $settings = $this->config_patterns->get($pattern);
-
-        foreach ($settings as $key => &$value)
-        {
-            switch ($key)
-            {
-                case 'quality':
-                case 'width':
-                case 'height':
-                    $value = trim($value, 'px');
-                    if (preg_match('/([0-9]*)%/', $value, $matches))
-                    {
-                        list($width, $height) = getimagesize($imagepath);
-                        $value = $matches[1];
-                        $value = ${$key} / 100 * $value;
-                    }
-                    $value = $key[0] . $value;
-                    break;
-                case 'crop':
-                    if (!empty($value))
-                    {
-                        $value = $key[0];
-                    }
-                    else
-                    {
-                        unset($value);
-                    }
-                    break;
-            }
+        if (!array_key_exists($pattern, $this->config_patterns)) {
+            $this->_throw_404();
         }
-        $params = implode('-', $settings);
-
-        $this->image = Image::factory($imagepath);
-        
-        // The parameters are separated by hyphens
-        $raw_params = explode('-', $params);
-        
-        // Update param values from passed values
-        foreach ($raw_params as $raw_param)
+        if (file_exists($imagepath))
         {
-            $name = $raw_param[0];
-            $value = substr($raw_param, 1, strlen($raw_param) - 1);
-            
-            if ($name == 'c')
+            $settings = $this->config_patterns->get($pattern);
+
+            foreach ($settings as $key => &$value)
             {
-                $this->url_params[$name] = TRUE;
-                
-                // When croping, we must have a width and height to pass to imagecreatetruecolor method
-                // Make width the height or vice versa if either is not passed
-                if (empty($this->url_params['w']))
+                switch ($key)
                 {
-                    $this->url_params['w'] = $this->url_params['h'];
-                }
-                if (empty($this->url_params['h']))
-                {
-                    $this->url_params['h'] = $this->url_params['w'];
+                    case 'quality':
+                    case 'width':
+                    case 'height':
+                        $value = trim($value, 'px');
+                        if (preg_match('/([0-9]*)%/', $value, $matches))
+                        {
+                            list($width, $height) = getimagesize($imagepath);
+                            $value = $matches[1];
+                            $value = ${$key} / 100 * $value;
+                        }
+                        $value = $key[0] . $value;
+                        break;
+                    case 'crop':
+                        if (!empty($value))
+                        {
+                            $value = $key[0];
+                        }
+                        else
+                        {
+                            unset($value);
+                        }
+                        break;
                 }
             }
-            elseif (key_exists($name, $this->url_params))
+            $params = implode('-', $settings);
+
+            $this->image = Image::factory($imagepath);
+
+            // The parameters are separated by hyphens
+            $raw_params = explode('-', $params);
+
+            // Update param values from passed values
+            foreach ($raw_params as $raw_param)
             {
-                // Remaining expected params (w, h, q)
-                $this->url_params[$name] = $value;
+                $name = $raw_param[0];
+                $value = substr($raw_param, 1, strlen($raw_param) - 1);
+
+                if ($name == 'c')
+                {
+                    $this->url_params[$name] = TRUE;
+
+                    // When croping, we must have a width and height to pass to imagecreatetruecolor method
+                    // Make width the height or vice versa if either is not passed
+                    if (empty($this->url_params['w']))
+                    {
+                        $this->url_params['w'] = $this->url_params['h'];
+                    }
+                    if (empty($this->url_params['h']))
+                    {
+                        $this->url_params['h'] = $this->url_params['w'];
+                    }
+                }
+                elseif (key_exists($name, $this->url_params))
+                {
+                    // Remaining expected params (w, h, q)
+                    $this->url_params[$name] = $value;
+                }
+                else
+                {
+                    // Watermarks or invalid params
+                    $this->url_params[$raw_param] = $raw_param;
+                }
             }
-            else
+
+            //Do not scale up images
+            if (!$this->config['scale_up'])
             {
-                // Watermarks or invalid params
-                $this->url_params[$raw_param] = $raw_param;
+                    if ($this->url_params['w'] > $this->image->width) $this->url_params['w'] = $this->image->width;
+                    if ($this->url_params['h'] > $this->image->height) $this->url_params['h'] = $this->image->height;
+            }
+
+            // Must have at least a width or height
+            if(empty($this->url_params['w']) AND empty($this->url_params['h']))
+            {
+                $this->_throw_404();
+            }
+        }
+        else
+        {
+            // If original image not exist, then check for exist cache
+            $cached = Request::current()->uri();
+            if (file_exists($cached))
+            {
+                $this->cached_file = $cached;
+            }
+            else {
+                // Original and cached files is not avaliable
+                $this->_throw_404();
             }
         }
 
-		//Do not scale up images
-		if (!$this->config['scale_up'])
-		{
-			if ($this->url_params['w'] > $this->image->width) $this->url_params['w'] = $this->image->width;
-			if ($this->url_params['h'] > $this->image->height) $this->url_params['h'] = $this->image->height;
-		}
-        
-        // Must have at least a width or height
-        if(empty($this->url_params['w']) AND empty($this->url_params['h']))
-        {
-            throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
-                                                    array(':uri' => Request::$current->uri()));
-        }
-  
         // Set the url filepath
         $this->source_file = $imagepath;
     }
-    
+
+    protected function _throw_404() {
+        throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
+                                                array(':uri' => Request::$current->uri()));
+    }
+
     /**
      * Checks if a physical version of the cached image exists
      * 
