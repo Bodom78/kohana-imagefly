@@ -13,7 +13,12 @@ class ImageCache
      * @var  array       This modules config options
      */
     protected $config = NULL;
-    
+
+    /**
+     * @var  array       Patterns config
+     */
+    protected $config_patterns = NULL;
+
     /**
      * @var  string      Stores the path to the cache directory which is either whats set in the config "cache_dir"
      *                   or processed sub directories when the "mimic_source_dir" config option id set to TRUE
@@ -64,7 +69,7 @@ class ImageCache
         error_reporting(error_reporting() & ~E_STRICT);
         
         // Set the config
-        $this->config = Kohana::$config->load('imagecache');
+        $this->load_config();
         $pattern = Request::current()->param('pattern');
         $this->config['cache_dir'] .= $pattern .'/';
         
@@ -92,7 +97,15 @@ class ImageCache
         // Serve the image file
         $this->_serve_file();
     }
-    
+
+    /**
+     * Load main config and patterns
+     */
+    protected function load_config() {
+        $this->config = Kohana::$config->load('imagecache');
+        $this->config_patterns = Kohana::$config->load('imagecache_patterns');
+    }
+
     /**
      * Try to create the config cache dir if required
      * Set $cache_dir
@@ -150,8 +163,7 @@ class ImageCache
         $pattern = Request::current()->param('pattern');
         $filepath = Request::current()->param('imagepath');
         list($width, $height) = getimagesize($filepath);
-        $config = Kohana::$config->load('imagecache_patterns');
-        $settings = $config->get($pattern);
+        $settings = $this->config_patterns->get($pattern);
 
         // If enforcing params, ensure it's a match
         if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']) AND !empty($settings))
