@@ -64,7 +64,7 @@ class ImageCache
         error_reporting(error_reporting() & ~E_STRICT);
         
         // Set the config
-        $this->config = Kohana::$config->load('imagefly');
+        $this->config = Kohana::$config->load('imagecache');
         $pattern = Request::current()->param('pattern');
         $this->config['cache_dir'] .= $pattern .'/';
         
@@ -154,7 +154,6 @@ class ImageCache
         $pattern = Request::current()->param('pattern');
         $filepath = Request::current()->param('imagepath');
         list($width, $height) = getimagesize($filepath);
-        //print_r(array($width, $height));
         $config = Kohana::$config->load('imagecache_patterns');
         $settings = $config->get($pattern);
 

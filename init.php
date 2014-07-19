@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-$config = Kohana::$config->load('imagefly');
+$config = Kohana::$config->load('imagecache');
 $cachedir = trim($config->get('cache_dir'), '/');
 
 // Catch-all route for ImageCache
