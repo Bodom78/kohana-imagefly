@@ -81,7 +81,7 @@ class ImageCache
         $this->_create_mimic_cache_dir();
         
         // Set the cached filepath with filename
-        $this->cached_file = $this->cache_dir.$this->_encoded_filename();
+        $this->cached_file = $this->cache_dir . pathinfo($this->source_file, PATHINFO_BASENAME);
         
         // Create a modified cache file if required
         if ( ! $this->_cached_exists() AND $this->_cached_required())
@@ -124,7 +124,7 @@ class ImageCache
         if ($this->config['mimic_source_dir'])
         {
             // Get the dir from the source file
-            $mimic_dir = $this->config['cache_dir'].pathinfo($this->source_file, PATHINFO_DIRNAME);
+            $mimic_dir = $this->config['cache_dir'] . pathinfo($this->source_file, PATHINFO_DIRNAME);
             
             // Try to create if it does not exist
             if( ! file_exists($mimic_dir))
@@ -261,23 +261,7 @@ class ImageCache
         
         return TRUE;
     }
-    
-    /**
-     * Returns a hash of the filepath and params plus last modified of source to be used as a unique filename
-     * 
-     * @return  string
-     */
-    protected function _encoded_filename()
-    {
-        $ext = strtolower(pathinfo($this->source_file, PATHINFO_EXTENSION));
-        $encode = md5($this->source_file.http_build_query($this->url_params));
 
-        // Build the parts of the filename
-        $encoded_name = $encode.'-'.$this->source_modified.'.'.$ext;
-
-        return $encoded_name;
-    }
-    
     /**
      * Creates a cached cropped/resized version of the file
      */
