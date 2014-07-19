@@ -24,22 +24,7 @@ return array
     /**
      * If the image should be scaled up beyond it's original dimensions on resize.
      */
-	'scale_up'		   => FALSE,
-	/**
-     * Will only allow param configurations set in the presets.
-     * Best enabled on production sites to reduce spamming of different sized images on the server.
-     */
-	'enforce_presets'  => FALSE,
-	/**
-     * Imagefly params that are allowed when enforce_presets is set to TRUE
-     * Any other param configuration will throw a 404 error.
-     */
-    'presets'          => array(
-        /* Example
-        'w320-h240-c',
-        'w640-w480-q60' 
-        */
-    ),
+    'scale_up'		   => FALSE,
     /**
      * Configure one or more watermarks. Each configuration key can be passed as a param through an Imagefly URL to apply the watermark.
      * If no offset is specified, the center of the axis will be used.

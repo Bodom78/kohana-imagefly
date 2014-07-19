@@ -165,8 +165,8 @@ class ImageCache
         list($width, $height) = getimagesize($filepath);
         $settings = $this->config_patterns->get($pattern);
 
-        // If enforcing params, ensure it's a match
-        if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']) AND !empty($settings))
+        // If pattern not exist return 404
+        if (!array_key_exists($pattern, $this->config_patterns))
             throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
                                                     array(':uri' => Request::$current->uri()));
         foreach ($settings as $key => &$value)
