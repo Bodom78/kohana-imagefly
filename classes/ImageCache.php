@@ -34,7 +34,12 @@ class ImageCache
      * @var  boolean     A flag for weither we should serve the default or cached image
      */
     protected $serve_default = FALSE;
-    
+
+    /**
+     * @var  string      Current pattern name
+     */
+    protected $pattern = NULL;
+
     /**
      * @var  string      The source filepath and filename
      */
@@ -63,21 +68,19 @@ class ImageCache
     /**
      * Constructorbot
      */
-    public function __construct()
+    public function __construct($imagepath = NULL, $pattern = NULL)
     {
         // Prevent unnecessary warnings on servers that are set to display E_STRICT errors, these will damage the image data.
         error_reporting(error_reporting() & ~E_STRICT);
         
         // Set the config
         $this->load_config();
-        $pattern = Request::current()->param('pattern');
-        $this->config['cache_dir'] .= $pattern .'/';
         
         // Try to create the cache directory if it does not exist
         $this->_create_cache_dir();
         
         // Parse and set the image modify params
-        $this->_set_params();
+        $this->_set_params($imagepath, $pattern);
         
         // Set the source file modified timestamp
         $this->source_modified = filemtime($this->source_file);
@@ -93,9 +96,6 @@ class ImageCache
         {
             $this->_create_cached();
         }
-        
-        // Serve the image file
-        $this->_serve_file();
     }
 
     /**
@@ -157,12 +157,20 @@ class ImageCache
     /**
      * Sets the operations params from the url
      */
-    private function _set_params()
+    protected function _set_params($imagepath = NULL, $pattern = NULL)
     {
-        // Get values from request
-        $pattern = Request::current()->param('pattern');
-        $filepath = Request::current()->param('imagepath');
-        list($width, $height) = getimagesize($filepath);
+        // Get values from request if need
+        if (empty($imagepath))
+        {
+            $imagepath = Request::current()->param('imagepath');
+        }
+
+        if (empty($pattern))
+        {
+            $pattern = Request::current()->param('pattern');
+        }
+
+        list($width, $height) = getimagesize($imagepath);
         $settings = $this->config_patterns->get($pattern);
 
         // If pattern not exist return 404
@@ -198,7 +206,7 @@ class ImageCache
         }
         $params = implode('-', $settings);
 
-        $this->image = Image::factory($filepath);
+        $this->image = Image::factory($imagepath);
         
         // The parameters are separated by hyphens
         $raw_params = explode('-', $params);
@@ -251,7 +259,7 @@ class ImageCache
         }
   
         // Set the url filepath
-        $this->source_file = $filepath;
+        $this->source_file = $imagepath;
     }
     
     /**
@@ -406,7 +414,7 @@ class ImageCache
         }
         
         // Output the file
-        $this->_output_file($file_data);
+        return $file_data;
     }
     
     /**
@@ -414,8 +422,9 @@ class ImageCache
      * 
      * @param  string     path to the file to server (either default or cached version)
      */
-    protected function _output_file($file_data)
+    public function output_file()
     {
+        $file_data = $this->_serve_file();
         // Create the headers
         $this->_create_headers($file_data);
         

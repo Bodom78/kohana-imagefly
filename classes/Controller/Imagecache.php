@@ -12,6 +12,7 @@ class Controller_Imagecache extends Controller {
     public function action_index()
     {
         $this->auto_render = FALSE;
-        new ImageCache();
+        $image = new ImageCache();
+        $image->output_file();
     }
 }
