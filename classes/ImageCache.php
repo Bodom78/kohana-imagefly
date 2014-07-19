@@ -121,27 +121,24 @@ class ImageCache
      */
     protected function _create_mimic_cache_dir()
     {
-        if ($this->config['mimic_source_dir'])
+        // Get the dir from the source file
+        $mimic_dir = $this->config['cache_dir'] . pathinfo($this->source_file, PATHINFO_DIRNAME);
+
+        // Try to create if it does not exist
+        if( ! file_exists($mimic_dir))
         {
-            // Get the dir from the source file
-            $mimic_dir = $this->config['cache_dir'] . pathinfo($this->source_file, PATHINFO_DIRNAME);
-            
-            // Try to create if it does not exist
-            if( ! file_exists($mimic_dir))
+            try
             {
-                try
-                {
-                    mkdir($mimic_dir, 0755, TRUE);
-                }
-                catch(Exception $e)
-                {
-                    throw new Kohana_Exception($e);
-                }
+                mkdir($mimic_dir, 0755, TRUE);
             }
-            
-            // Set the cache dir, with trailling slash
-            $this->cache_dir = $mimic_dir.'/';
+            catch(Exception $e)
+            {
+                throw new Kohana_Exception($e);
+            }
         }
+
+        // Set the cache dir, with trailling slash
+        $this->cache_dir = $mimic_dir.'/';
     }
 
     /**

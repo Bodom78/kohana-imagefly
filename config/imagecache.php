@@ -18,11 +18,6 @@ return array
      */
     'cache_dir'        => 'files/imagecache/',
     /**
-     * Mimic the source file folder structure within the cache directory.
-     * Useful if you want to keep track of cached files and folders to perhaps periodically clear some cache folders but not others.
-     */
-    'mimic_source_dir' => TRUE,
-    /**
      * The default quality of images when not specified in the URL
      */
     'quality'          => 80,
