@@ -64,7 +64,12 @@ class ImageCache
      * @var  string      The cached filename with path ($this->cache_dir)
      */
     protected $cached_file = NULL;
-    
+
+    /**
+     * @var  string      The filename of default image
+     */
+    protected $default_image = NULL;
+
     /**
      * Constructorbot
      * 
@@ -81,7 +86,9 @@ class ImageCache
         
         // Try to create the cache directory if it does not exist
         $this->_create_cache_dir();
-        
+
+        $this->init_default_image();
+
         // Parse and set the image modify params
         $this->_set_params($imagepath, $pattern);
         
@@ -107,6 +114,16 @@ class ImageCache
     protected function load_config() {
         $this->config = Kohana::$config->load('imagecache');
         $this->config_patterns = Kohana::$config->load('imagecache_patterns');
+    }
+
+    /**
+     * Initialize default image filepath
+     */
+    protected function init_default_image() {
+        if( file_exists($this->config['default_image']))
+        {
+            $this->default_image = $this->config['default_image'];
+        }
     }
 
     /**
@@ -170,6 +187,10 @@ class ImageCache
         if (empty($imagepath))
         {
             $imagepath = Request::current()->param('imagepath');
+            if (!empty($this->default_image) && (empty($imagepath) || !file_exists($imagepath)))
+            {
+                $imagepath = $this->default_image;
+            }
         }
 
         if (empty($pattern))
@@ -177,13 +198,13 @@ class ImageCache
             $pattern = Request::current()->param('pattern');
         }
 
-        list($width, $height) = getimagesize($imagepath);
-        $settings = $this->config_patterns->get($pattern);
-
         // If pattern not exist return 404
         if (!array_key_exists($pattern, $this->config_patterns))
             throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
                                                     array(':uri' => Request::$current->uri()));
+
+        $settings = $this->config_patterns->get($pattern);
+
         foreach ($settings as $key => &$value)
         {
             switch ($key)
@@ -194,6 +215,7 @@ class ImageCache
                     $value = trim($value, 'px');
                     if (preg_match('/([0-9]*)%/', $value, $matches))
                     {
+                        list($width, $height) = getimagesize($imagepath);
                         $value = $matches[1];
                         $value = ${$key} / 100 * $value;
                     }

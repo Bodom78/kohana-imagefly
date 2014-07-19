@@ -24,7 +24,13 @@ return array
     /**
      * If the image should be scaled up beyond it's original dimensions on resize.
      */
-    'scale_up'		   => FALSE,
+    'scale_up'         => FALSE,
+    /**
+     * Default image if the requested image is not available.
+     * 
+     * @example 'default_image'    => 'files/misc/default.png',
+     */
+    'default_image'    => FALSE,
     /**
      * Configure one or more watermarks. Each configuration key can be passed as a param through an Imagefly URL to apply the watermark.
      * If no offset is specified, the center of the axis will be used.
