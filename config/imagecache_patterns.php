@@ -4,13 +4,13 @@
  * @package   Modules
  * @category  Imagecache
  * @author    Vyacheslav Malchik <validoll-ru@yandex.ru>
- * @uses      Imagefly Module
+ * @uses      Image Module
  * 
  * @example
  * return array(
  *    'thumb' => array(
  *       'width' => '50%',
- *       'height' => '50%',
+ *       'height' => '50px',
  *       'crop' => TRUE,
  *       'quality' => 80,
  *       'watermark' => 'custom_watermark',
@@ -19,8 +19,9 @@
  */
 return array(
     'thumb' => array(
-        'width' => '50%',
-        'height' => '50%',
+        'width' => '80',
+        'height' => '80',
+        'crop' => TRUE,
     ),
 
 );

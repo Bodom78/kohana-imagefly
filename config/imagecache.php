@@ -4,7 +4,7 @@
  * @package   Modules
  * @category  Imagecache
  * @author    Vyacheslav Malchik <validoll-ru@yandex.ru>
- * @uses      Imagefly Module
+ * @uses      Image Module
  */
 
 return array

@@ -1,29 +1,20 @@
 ## Usage Examples
 
-Here are some examples of what you can do with Imagefly.
+Here are some examples of what you can do with ImageCache.
 
-**Resize to exactly 100px width and height cropping from the center**  
-`<img src="/imagefly/w100-c/path/to/image.jpg">`  
-**OR**  
-`<img src="/imagefly/h100-c/path/to/image.jpg">`
+At first set path of cache dir in your `imagecache.php`.
+For example:
 
-**Resize to exactly 100px width and 150px height cropping from the center**  
-`<img src="/imagefly/w100-h150-c/path/to/image.jpg">`
+    'cache_dir' => 'files/imagecache/',
 
-**Resize proportionally until width is 100 pixels**  
-`<img src="/imagefly/w100/path/to/image.jpg">`
+At second set at least one pattern in your `imagecache_patterns.php`.
+For example:
 
-**Resize proportionally until height is 100 pixels**  
-`<img src="/imagefly/h100/path/to/image.jpg">`
+    'thumb' => array(
+        'width' => '80',
+        'height' => '80',
+        'crop' => TRUE,
+    ),
 
-**Resize proportionally until either the width or height is 100 pixels, whichever comes first**  
-`<img src="/imagefly/w100-h100/path/to/image.jpg">`
-
-**Resize proportionally until height is 100 pixels with JPEG quality set to 60**  
-`<img src="/imagefly/h100-q60/path/to/image.jpg">`
-
-**Adding a watermark**  
-`<img src="/imagefly/w100-c-first_watermark/path/to/image.jpg">`  
-
-**Adding multiple watermarks**  
-`<img src="/imagefly/w100-c-first_watermark-second_watermark/path/to/image.jpg">` 
+**Use this path for get resized image**
+`<img src="/files/imagecache/thumb/path/to/image.jpg">`

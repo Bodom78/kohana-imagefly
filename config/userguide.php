@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+/**
+ * @package   Modules
+ * @category  Imagecache
+ * @author    Vyacheslav Malchik <validoll-ru@yandex.ru>
+ * @uses      Image Module
+ */
+
 return array(
 	// Leave this alone
 	'modules' => array(
@@ -17,7 +24,7 @@ return array(
 			'description' => 'Resize images directly in your HTML markup via the image src attribute.',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2008–2011 Fady Khalife',
+			'copyright' => '&copy; 2014 Vyacheslav Malchik',
 		)	
 	)
 );
