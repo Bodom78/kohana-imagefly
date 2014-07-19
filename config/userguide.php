@@ -11,7 +11,7 @@ return array(
 			'enabled' => TRUE,
 			
 			// The name that should show up on the userguide index page
-			'name' => 'Imagefly',
+			'name' => 'ImageCache',
 
 			// A short description of this module, shown on the index page
 			'description' => 'Resize images directly in your HTML markup via the image src attribute.',

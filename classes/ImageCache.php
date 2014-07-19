@@ -1,12 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
 /**
  * @package   Modules
- * @category  Imagefly
- * @author    Fady Khalife
- * @uses      Image Module
+ * @category  Imagecache
+ * @author    Vyacheslav Malchik <validoll-ru@yandex.ru>
+ * @uses      Imagefly Module
  */
  
-class ImageFly
+class ImageCache
 {
     /**
      * @var  array       This modules config options
@@ -64,7 +65,10 @@ class ImageFly
         
         // Set the config
         $this->config = Kohana::$config->load('imagefly');
+        $pattern = Request::current()->param('pattern');
+        $this->config['cache_dir'] .= $pattern .'/';
         
+        print_r($this->config['cache_dir']);
         // Try to create the cache directory if it does not exist
         $this->_create_cache_dir();
         
@@ -94,7 +98,7 @@ class ImageFly
      * Try to create the config cache dir if required
      * Set $cache_dir
      */
-    private function _create_cache_dir()
+    protected function _create_cache_dir()
     {
         if( ! file_exists($this->config['cache_dir']))
         {
@@ -116,7 +120,7 @@ class ImageFly
      * Try to create the mimic cache dir from the source path if required
      * Set $cache_dir
      */
-    private function _create_mimic_cache_dir()
+    protected function _create_mimic_cache_dir()
     {
         if ($this->config['mimic_source_dir'])
         {
@@ -140,21 +144,42 @@ class ImageFly
             $this->cache_dir = $mimic_dir.'/';
         }
     }
-    
+
     /**
      * Sets the operations params from the url
      */
     private function _set_params()
     {
         // Get values from request
-        $params = Request::current()->param('params');
+        $pattern = Request::current()->param('pattern');
         $filepath = Request::current()->param('imagepath');
-        
+        list($width, $height) = getimagesize($filepath);
+        //print_r(array($width, $height));
+        $config = Kohana::$config->load('imagecache_patterns');
+        $settings = $config->get($pattern);
+
         // If enforcing params, ensure it's a match
-        if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']))
+        if ($this->config['enforce_presets'] AND ! in_array($params, $this->config['presets']) AND !empty($settings))
             throw new HTTP_Exception_404('The requested URL :uri was not found on this server.',
                                                     array(':uri' => Request::$current->uri()));
-        
+        foreach ($settings as $key => &$value)
+        {
+            switch ($key)
+            {
+                case 'width':
+                case 'height':
+                    $value = trim($value, 'px');
+                    if (preg_match('/([0-9]*)%/', $value, $matches))
+                    {
+                        $value = $matches[1];
+                        $value = ${$key} / 100 * $value;
+                    }
+                    $value = $key[0] . $value;
+                    break;
+            }
+        }
+        $params = implode('-', $settings);
+
         $this->image = Image::factory($filepath);
         
         // The parameters are separated by hyphens
@@ -216,7 +241,7 @@ class ImageFly
      * 
      * @return boolean
      */
-    private function _cached_exists()
+    protected function _cached_exists()
     {
         return file_exists($this->cached_file);
     }
@@ -226,7 +251,7 @@ class ImageFly
      * 
      * @return boolean
      */
-    private function _cached_required()
+    protected function _cached_required()
     {
         $image_info = getimagesize($this->source_file);
         
@@ -244,7 +269,7 @@ class ImageFly
      * 
      * @return  string
      */
-    private function _encoded_filename()
+    protected function _encoded_filename()
     {
         $ext = strtolower(pathinfo($this->source_file, PATHINFO_EXTENSION));
         $encode = md5($this->source_file.http_build_query($this->url_params));
@@ -258,7 +283,7 @@ class ImageFly
     /**
      * Creates a cached cropped/resized version of the file
      */
-    private function _create_cached()
+    protected function _create_cached()
     {
         if($this->url_params['c'])
         {
@@ -306,7 +331,7 @@ class ImageFly
      * 
      * @param  string     path to the file to server (either default or cached version)
      */
-    private function _create_headers($file_data)
+    protected function _create_headers($file_data)
     {        
         // Create the required header vars
         $last_modified = gmdate('D, d M Y H:i:s', filemtime($file_data)).' GMT';
@@ -348,7 +373,7 @@ class ImageFly
      * 
      * @param  string  header formatted date
      */
-    private function _modified_headers($last_modified)
+    protected function _modified_headers($last_modified)
     {  
         $modified_since = (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
             ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])
@@ -366,7 +391,7 @@ class ImageFly
     /**
      * Decide which filesource we are using and serve
      */
-    private function _serve_file()
+    protected function _serve_file()
     {
         // Set either the source or cache file as our datasource
         if ($this->serve_default)
@@ -387,7 +412,7 @@ class ImageFly
      * 
      * @param  string     path to the file to server (either default or cached version)
      */
-    private function _output_file($file_data)
+    protected function _output_file($file_data)
     {
         // Create the headers
         $this->_create_headers($file_data);
@@ -412,3 +437,4 @@ class ImageFly
         exit();
     }
 }
+

@@ -1,9 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
 /**
  * @package   Modules
- * @category  Imagefly
- * @author    Fady Khalife
- * @uses      Image Module
+ * @category  Imagecache
+ * @author    Vyacheslav Malchik <validoll-ru@yandex.ru>
+ * @uses      Imagefly Module
  */
 
 return array
@@ -15,7 +16,7 @@ return array
     /**
      * Path to the image cache directory you would like to use, don't forget the trailing slash!
      */
-    'cache_dir'        => 'cache/',
+    'cache_dir'        => 'files/imagecache/',
     /**
      * Mimic the source file folder structure within the cache directory.
      * Useful if you want to keep track of cached files and folders to perhaps periodically clear some cache folders but not others.

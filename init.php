@@ -1,13 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * @package   Modules
- * @category  Imagefly
- * @author    Fady Khalife
- * @uses      Image Module
- */
- 
-Route::set('imagefly', 'imagefly/<params>/<imagepath>', array('imagepath' => '.*'))
-    ->defaults(array(
-        'controller' => 'ImageFly',
-    ));
-    
+
+$config = Kohana::$config->load('imagefly');
+$cachedir = trim($config->get('cache_dir'), '/');
+
+// Catch-all route for ImageCache
+Route::set('imagecache', $cachedir.'(/<pattern>(/<imagepath>))', array('pattern' => '[^\/]+', 'imagepath' => '.+\..+'))
+	->defaults(array(
+		'controller' => 'Imagecache',
+		'action' => 'index',
+            ));
