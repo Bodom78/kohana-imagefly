@@ -173,6 +173,7 @@ class ImageCache
         {
             switch ($key)
             {
+                case 'quality':
                 case 'width':
                 case 'height':
                     $value = trim($value, 'px');
@@ -182,6 +183,16 @@ class ImageCache
                         $value = ${$key} / 100 * $value;
                     }
                     $value = $key[0] . $value;
+                    break;
+                case 'crop':
+                    if (!empty($value))
+                    {
+                        $value = $key[0];
+                    }
+                    else
+                    {
+                        unset($value);
+                    }
                     break;
             }
         }
