@@ -68,7 +68,6 @@ class ImageCache
         $pattern = Request::current()->param('pattern');
         $this->config['cache_dir'] .= $pattern .'/';
         
-        print_r($this->config['cache_dir']);
         // Try to create the cache directory if it does not exist
         $this->_create_cache_dir();
         
