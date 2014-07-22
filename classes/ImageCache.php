@@ -495,5 +495,14 @@ class ImageCache
 
         exit();
     }
+
+    /**
+     * Gettre for cached file path
+     * 
+     * @return string
+     */
+    public function get_cached_path() {
+        return $this->cached_file;
+    }
 }
 
