@@ -94,6 +94,8 @@ class ImageCache
 
         if (empty($this->cached_file))
         {
+            $this->cache_dir .= $pattern . '/';
+
             // Set the source file modified timestamp
             $this->source_modified = filemtime($this->source_file);
 
@@ -157,7 +159,8 @@ class ImageCache
     protected function _create_mimic_cache_dir()
     {
         // Get the dir from the source file
-        $mimic_dir = $this->config['cache_dir'] . pathinfo($this->source_file, PATHINFO_DIRNAME);
+        //$mimic_dir = $this->config['cache_dir'] . pathinfo($this->source_file, PATHINFO_DIRNAME);
+        $mimic_dir = $this->cache_dir . pathinfo($this->source_file, PATHINFO_DIRNAME);
 
         // Try to create if it does not exist
         if( ! file_exists($mimic_dir))
