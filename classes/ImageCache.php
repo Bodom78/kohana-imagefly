@@ -192,10 +192,11 @@ class ImageCache
         if (empty($imagepath))
         {
             $imagepath = Request::current()->param('imagepath');
-            if (!empty($this->default_image) && (empty($imagepath) || !file_exists($imagepath)))
-            {
-                $imagepath = $this->default_image;
-            }
+        }
+
+        if (!empty($this->default_image) && (empty($imagepath) || !file_exists($imagepath)))
+        {
+            $imagepath = $this->default_image;
         }
 
         if (empty($pattern))
