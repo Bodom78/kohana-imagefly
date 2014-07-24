@@ -1,5 +1,5 @@
 {
-	"name":        "validoll/imagecache",
+	"name":        "validoll/kohana-imagecache",
         "version":     "0.1.0",
 	"type":        "kohana-module",
 	"description": "A Kohana module for create resized / cropped images.",
