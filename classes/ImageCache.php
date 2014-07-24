@@ -451,25 +451,6 @@ class ImageCache
         header('Connection: close');
         exit();
     }
-
-    /**
-     * Decide which filesource we are using and serve
-     */
-    protected function _serve_file()
-    {
-        // Set either the source or cache file as our datasource
-        if ($this->serve_default)
-        {
-            $file_data = $this->source_file;
-        }
-        else
-        {
-            $file_data = $this->cached_file;
-        }
-        
-        // Output the file
-        return $file_data;
-    }
     
     /**
      * Outputs the cached image file and exits
