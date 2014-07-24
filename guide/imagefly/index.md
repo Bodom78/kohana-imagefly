@@ -22,7 +22,7 @@ In your `application/bootstrap.php` file modify the call to Kohana::modules and 
 
 ## Notes
 
-* This is progect based on [Imagefly](https://github.com/Bodom78/kohana-imagefly) by [Fady Khalife](https://github.com/Bodom78)
+* This is project based on [Imagefly](https://github.com/Bodom78/kohana-imagefly) by [Fady Khalife](https://github.com/Bodom78)
 * ImageCache will not process images when the width and height prams are the same as the source
 * Don't forget to make your cache directory writable.
 * Inspired by the [smart-lencioni-image-resizer](http://code.google.com/p/smart-lencioni-image-resizer/) by Joe Lencioni
