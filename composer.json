@@ -1,0 +1,25 @@
+{
+	"name":        "validoll/imagecache",
+        "version":     "0.1.0",
+	"type":        "kohana-module",
+	"description": "A Kohana module for create resized / cropped images.",
+	"license":     "MIT",
+	"keywords":    ["kohana", "framework", "image", "imagecache"],
+	"authors": [
+		{
+			"name":     "Vyacheslav Malchik",
+			"email":    "validoll-ru@yandex.ru",
+			"homepage": "http://github.com/validoll",
+			"role":     "developer"
+		}
+	],
+	"support": {
+		"issues":   "https://github.com/validoll/kohana-imagecache/issues",
+		"source":   "https://github.com/validoll/kohana-imagecache"
+	},
+	"require": {
+		"composer/installers": "~1.0",
+		"kohana/core":         ">=3.3",
+		"php":                 ">=5.3.3"
+	}
+}
