@@ -211,7 +211,7 @@ class ImageCache
         if (file_exists($imagepath))
         {
             $settings = $this->config_patterns->get($pattern);
-
+            list($source_width, $source_height) = getimagesize($imagepath);
             foreach ($settings as $key => &$value)
             {
                 switch ($key)
@@ -222,9 +222,8 @@ class ImageCache
                         $value = trim($value, 'px');
                         if (preg_match('/([0-9]*)%/', $value, $matches))
                         {
-                            list($width, $height) = getimagesize($imagepath);
                             $value = $matches[1];
-                            $value = ${$key} / 100 * $value;
+                            $value = ${'source_'.$key} / 100 * $value;
                         }
                         $value = $key[0] . $value;
                         break;
@@ -287,10 +286,11 @@ class ImageCache
                     if ($this->url_params['h'] > $this->image->height) $this->url_params['h'] = $this->image->height;
             }
 
-            // Must have at least a width or height
+            // Get origin size if params is empty
             if(empty($this->url_params['w']) AND empty($this->url_params['h']))
             {
-                $this->_throw_404();
+                $this->url_params['w'] = $source_width;
+                $this->url_params['h'] = $source_height;
             }
         }
         else
@@ -451,7 +451,7 @@ class ImageCache
         header('Connection: close');
         exit();
     }
-    
+
     /**
      * Decide which filesource we are using and serve
      */
@@ -476,7 +476,7 @@ class ImageCache
      */
     public function output_file()
     {
-        $file_data = $this->_serve_file();
+        $file_data = $this->get_cached_path();
         // Create the headers
         $this->_create_headers($file_data);
         
@@ -501,12 +501,23 @@ class ImageCache
     }
 
     /**
-     * Gettre for cached file path
+     * Getter for cached file path
      * 
      * @return string
      */
     public function get_cached_path() {
-        return $this->cached_file;
+        // Set either the source or cache file as our datasource
+        if ($this->serve_default)
+        {
+            $file_data = $this->source_file;
+        }
+        else
+        {
+            $file_data = $this->cached_file;
+        }
+
+        // Output the file
+        return $file_data;
     }
 }
 
