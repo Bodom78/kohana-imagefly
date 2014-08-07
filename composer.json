@@ -1,0 +1,24 @@
+{
+    "name"        : "Bodom78/kohana-imagefly",
+    "type"        : "kohana-module",
+    "description" : "Create resized / cropped images directly through url parameters.",
+    "homepage"    : "https://github.com/Bodom78/kohana-imagefly",
+    "license"     : "MIT",
+    "keywords"    : ["image", "resize", "crop", "watermark", "kohana"],
+    "authors"     : [
+        {
+            "name"     : "Fady Khalife",
+            "homepage" : "http://fkportfolio.com",
+            "role"     : "developer"
+        }
+    ],
+    "support"     : {
+        "issues" : "https://github.com/Bodom78/kohana-imagefly/issues",
+        "source" : "https://github.com/Bodom78/kohana-imagefly"
+    },
+    "require"     : {
+        "composer/installers" : "~1.0",
+        "kohana/core"         : ">=3.2",
+        "php"                 : ">=5.3.3"
+    }
+}
