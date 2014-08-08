@@ -19,7 +19,7 @@ return array
     /**
      * Path to the image cache directory you would like to use, don't forget the trailing slash!
      */
-    'media_dir'        => 'media/',
+    'source_dir'        => '',
     /**
      * Mimic the source file folder structure within the cache directory.
      * Useful if you want to keep track of cached files and folders to perhaps periodically clear some cache folders but not others.
@@ -32,13 +32,13 @@ return array
     /**
      * If the image should be scaled up beyond it's original dimensions on resize.
      */
-	'scale_up'		   => FALSE,
-	/**
+    'scale_up'           => FALSE,
+    /**
      * Will only allow param configurations set in the presets.
      * Best enabled on production sites to reduce spamming of different sized images on the server.
      */
-	'enforce_presets'  => FALSE,
-	/**
+    'enforce_presets'  => FALSE,
+    /**
      * Imagefly params that are allowed when enforce_presets is set to TRUE
      * Any other param configuration will throw a 404 error.
      */
