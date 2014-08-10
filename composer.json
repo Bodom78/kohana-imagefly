@@ -1,6 +1,5 @@
 {
     "name"        : "bodom78/kohana-imagefly",
-    "type"        : "kohana-module",
     "description" : "Create resized / cropped images directly through url parameters.",
     "homepage"    : "https://github.com/bodom78/kohana-imagefly",
     "license"     : "MIT",
@@ -17,8 +16,6 @@
         "source" : "https://github.com/bodom78/kohana-imagefly"
     },
     "require"     : {
-        "composer/installers" : "~1.0",
-        "kohana/core"         : ">=3.2",
-        "php"                 : ">=5.3.3"
+        "php" : ">=5.3.3"
     }
 }
