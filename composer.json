@@ -16,6 +16,7 @@
         "source" : "https://github.com/bodom78/kohana-imagefly"
     },
     "require"     : {
-        "php" : ">=5.3.3"
+        "php"         : ">=5.3.3",
+        "kohana/core" : ">=3.2"
     }
 }
